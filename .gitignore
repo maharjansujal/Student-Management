@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.env
+
+# Django
+/staticfiles/
+media/
+*.log
+
+# VSCode / IDE
+.vscode/
+
+# Frontend (Next.js)
+frontend/node_modules/
+frontend/.next/
+frontend/.env.local
