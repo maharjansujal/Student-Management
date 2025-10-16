@@ -1,79 +1,31 @@
-"use client";
-import { useEffect, useState } from "react";
+// app/page.tsx
+import Link from "next/link";
 
-interface Student {
-  id: number;
-  name: string;
-  age: number;
-  grade: string;
-  email: string;
-}
-
-export default function App() {
-  const [students, setStudents] = useState<Student[]>([]);
-
-  async function deleteStudent(id: number) {
-    try {
-      const res = await fetch(`http://127.0.0.1:8000/api/students/${id}/`, {
-        method: "DELETE",
-      });
-      if (!res.ok) throw new Error("Failed to delete");
-      // Remove the student from local state so UI updates
-      setStudents(students.filter((s) => s.id !== id));
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-  async function editStudent(id: number, updatedStudent: Partial<Student>) {
-    try {
-      const res = await fetch(`http://127.0.0.1:8000/api/students/${id}/`, {
-        method: "PATCH", // or PUT if updating all fields
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedStudent),
-      });
-      if (!res.ok) throw new Error("Failed to edit");
-      const data = await res.json();
-      // Update state
-      setStudents(students.map((s) => (s.id === id ? data : s)));
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-  useEffect(() => {
-    async function fetchStudents() {
-      const res = await fetch("http://127.0.0.1:8000/api/students/");
-      const data = await res.json();
-      setStudents(data);
-      console.log(data);
-    }
-    fetchStudents();
-  }, []);
-
+export default function HomePage() {
   return (
-    <div className="p-4">
-      <h1 className="text-xl font-bold mb-4">Students List</h1>
-      <ul className="list-disc pl-5">
-        {students.map((student) => (
-          <li key={student.id}>
-            Name: {student.name}, Age: {student.age}, Grade: {student.grade},
-            Email: {student.email}
-            <button
-              className="ml-2 text-green-500"
-              onClick={() => editStudent(student.id, student)}
-            >
-              Edit
-            </button>
-            <button
-              className="ml-2 text-red-500"
-              onClick={() => deleteStudent(student.id)}
-            >
-              Delete
-            </button>
-          </li>
-        ))}
+    <div className="p-6 max-w-2xl mx-auto">
+      <h1 className="text-3xl font-bold mb-4">Student Management App</h1>
+      <p className="text-gray-700 mb-4">
+        This is a simple full-stack application built with Next.js for the
+        frontend and Django as the backend. It demonstrates modern concepts
+        like:
+      </p>
+      <ul className="list-disc pl-6 text-gray-700 mb-4">
+        <li>Server-side rendering (SSR) for dynamic data</li>
+        <li>Client-side interactivity for adding/editing students</li>
+        <li>Reusable React components and form modals</li>
+        <li>Type-safe frontend using TypeScript</li>
       </ul>
+      <p className="text-gray-700 mb-4">
+        Use the navigation above to view the list of students or learn more
+        about the app.
+      </p>
+      <Link
+        href="/students"
+        className="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+      >
+        Go to Students
+      </Link>
     </div>
   );
 }
