@@ -113,7 +113,7 @@ const MessageBox = ({
 
   return (
     <div
-      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm z-50"
+      className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-60 backdrop-blur-sm z-50"
       role="alertdialog"
       aria-modal="true"
       aria-labelledby="dialog-heading"
@@ -137,7 +137,7 @@ const MessageBox = ({
           <button
             ref={closeButtonRef}
             onClick={onClose}
-            className="text-gray-600 hover:text-black transition-colors text-lg"
+            className="text-gray-600 hover:text-black transition-colors text-lg cursor-pointer"
             title="Close"
             type="button"
             aria-label="Close dialog"
