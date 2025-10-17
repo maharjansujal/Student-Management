@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import FormModal from "@/components/FormModal";
+import DialogProvider, { useDialog } from "@/components/Dialog";
 
 interface Student {
   id: number;
@@ -10,7 +11,7 @@ interface Student {
   email: string;
 }
 
-export default function StudentsPage() {
+function Students() {
   const [students, setStudents] = useState<Student[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
@@ -25,31 +26,50 @@ export default function StudentsPage() {
     fetchStudents();
   }, []);
 
+  const dialog = useDialog();
+
   async function handleSave(studentData: Omit<Student, "id">, id?: number) {
     try {
+      // Ensure age is number
+      const payload = { ...studentData, age: Number(studentData.age) };
       let res: Response;
+
       if (id) {
-        // Edit existing student
+        // Edit student
         res = await fetch(`http://127.0.0.1:8000/api/students/${id}/`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(studentData),
+          body: JSON.stringify(payload),
         });
       } else {
         // Add new student
-        res = await fetch(`http://127.0.0.1:8000/api/students/`, {
+        res = await fetch("http://127.0.0.1:8000/api/students/", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(studentData),
+          body: JSON.stringify(payload),
         });
       }
 
-      if (!res.ok) throw new Error("Failed to save student");
-      await fetchStudents();
+      if (!res.ok) {
+        const data = await res.json();
+        // Check for field-specific errors
+        const firstErrorField = Object.keys(data)[0];
+        const message = data[firstErrorField]?.[0] || "Something went wrong";
+        dialog.error("Validation Error", message);
+        return;
+      }
+
+      // Success
+      await fetchStudents(); // refresh your student list
       setIsModalOpen(false);
       setEditingStudent(null);
+      dialog.success(
+        "Success!",
+        id ? "Student updated successfully." : "Student added successfully."
+      );
     } catch (err) {
       console.error(err);
+      dialog.error("Network Error", "Could not reach the server.");
     }
   }
 
@@ -60,6 +80,7 @@ export default function StudentsPage() {
       });
       if (!res.ok) throw new Error("Failed to delete");
       setStudents(students.filter((s) => s.id !== id));
+      dialog.success("Deleted!", "Student record has been deleted.");
     } catch (err) {
       console.error(err);
     }
@@ -124,5 +145,13 @@ export default function StudentsPage() {
         />
       )}
     </div>
+  );
+}
+
+export default function StudentsPage() {
+  return (
+    <DialogProvider>
+      <Students />
+    </DialogProvider>
   );
 }
