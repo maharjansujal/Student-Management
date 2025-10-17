@@ -15,7 +15,7 @@ export default function HomePage() {
         <li>Reusable React components and form modals</li>
         <li>Type-safe frontend using TypeScript</li>
       </ul>
-      <StudentChartWrapper /> {/* SSR + client chart */}
+      <StudentChartWrapper />
       <Link
         href="/students"
         className="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"

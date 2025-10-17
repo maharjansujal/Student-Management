@@ -2,14 +2,7 @@
 import { useEffect, useState } from "react";
 import FormModal from "@/components/FormModal";
 import DialogProvider, { useDialog } from "@/components/Dialog";
-
-interface Student {
-  id: number;
-  name: string;
-  age: number;
-  grade: string;
-  email: string;
-}
+import type { Student } from "@/types/student";
 
 function Students() {
   const [students, setStudents] = useState<Student[]>([]);

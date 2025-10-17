@@ -2,14 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import Input from "./Input";
 import { motion, AnimatePresence } from "framer-motion";
-
-interface Student {
-  id?: number;
-  name: string;
-  age: number;
-  grade: string;
-  email: string;
-}
+import type { Student } from "@/types/student";
 
 interface FormModalProps {
   onClose: () => void;

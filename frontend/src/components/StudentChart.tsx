@@ -11,21 +11,13 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { useMemo } from "react";
-
-interface Student {
-  id: number;
-  name: string;
-  age: number;
-  grade: string;
-  email: string;
-}
+import type { Student } from "@/types/student";
 
 interface StudentChartProps {
   students: Student[];
 }
 
 export function StudentChart({ students }: StudentChartProps) {
-  // Example: count students per grade
   const chartData = useMemo(() => {
     const dataMap = new Map<string, number>();
     students.forEach((s) => {
