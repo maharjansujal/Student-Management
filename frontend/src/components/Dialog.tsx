@@ -1,13 +1,12 @@
 "use client";
 
-import {
+import React, {
   createContext,
   useState,
   useCallback,
   useContext,
   useEffect,
   useRef,
-  FC,
   ReactNode,
 } from "react";
 import {
@@ -169,7 +168,7 @@ export const useDialog = () => {
   return context;
 };
 
-const DialogProvider: FC<{ children: ReactNode }> = ({ children }) => {
+const DialogProvider = ({ children }: { children: ReactNode }) => {
   const [dialog, setDialog] = useState<Omit<MessageProps, "onClose"> | null>(
     null
   );
